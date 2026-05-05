@@ -6,3 +6,7 @@ data/*.csv
 .DS_Store
 .vscode/
 output/
+*.png
+*.db
+.ipynb_checkpoints/
+Untitled.ipynb
