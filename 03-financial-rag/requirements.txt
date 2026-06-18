@@ -1,0 +1,6 @@
+langchain-text-splitters
+chromadb
+pdfplumber
+sentence-transformers  # 本地 embedding 模型（可选）
+openai                 # 兼容 DeepSeek API
+python-dotenv

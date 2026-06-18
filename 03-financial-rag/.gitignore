@@ -1,0 +1,9 @@
+chroma_db/
+data/
+.env
+reports/
+scripts/chunk_pdf.py
+scripts/extract_pdf.py
+scripts/index_chroma.py
+scripts/rag_query.py
+scripts/rag_rerank.py
