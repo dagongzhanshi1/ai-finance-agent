@@ -1,42 +1,44 @@
 """
 验证脚本：确认所有工具安装正确
-运行方式：python verify_setup.py
+运行方式：python3 verify_setup.py
 """
 import sys
 import importlib
 
 packages = [
-    ("pandas", "pd"),
-    ("numpy", "np"),
-    ("matplotlib", "mpl"),
-    ("yfinance", "yf"),
+    ("pandas", "pandas"),
+    ("numpy", "numpy"),
+    ("matplotlib", "matplotlib"),
+    ("seaborn", "seaborn"),
+    ("yfinance", "yfinance"),
     ("openai", "openai"),
-    ("langchain", "langchain"),
-    ("langgraph", "langgraph"),
+    ("dotenv", "python-dotenv"),
+    ("pydantic", "pydantic"),
+    ("streamlit", "streamlit"),
+    ("pdfplumber", "pdfplumber"),
     ("chromadb", "chromadb"),
-    ("streamlit", "st"),
-    ("sklearn", "sklearn"),
-    ("xgboost", "xgboost"),
+    ("langchain_text_splitters", "langchain-text-splitters"),
+    ("sentence_transformers", "sentence-transformers"),
 ]
 
 print("=" * 50)
-print("🎯 AI 金融求职 — 环境验证")
+print("AI 金融求职 - 环境验证")
 print("=" * 50)
 
 all_ok = True
-for pkg_name, alias in packages:
+for import_name, package_name in packages:
     try:
-        mod = importlib.import_module(pkg_name)
+        mod = importlib.import_module(import_name)
         ver = getattr(mod, "__version__", "ok")
-        print(f"  ✅ {pkg_name:20s} v{ver}")
+        print(f"  [OK]   {package_name:28s} v{ver}")
     except ImportError as e:
-        print(f"  ❌ {pkg_name:20s} 未安装: {e}")
+        print(f"  [MISS] {package_name:28s} 未安装: {e}")
         all_ok = False
 
 print("-" * 50)
 if all_ok:
-    print("🎉 所有包安装成功！可以开始学习了。")
+    print("所有包安装成功，可以运行阶段 1-3 项目。")
 else:
-    print("⚠️ 部分包未安装，请检查上面 ❌ 标记的包。")
+    print("部分包未安装，请先运行：pip install -r requirements.txt")
 print(f"\nPython 版本: {sys.version}")
 print("=" * 50)

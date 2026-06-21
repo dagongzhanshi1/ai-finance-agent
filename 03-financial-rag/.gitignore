@@ -1,7 +1,9 @@
 chroma_db/
-data/
 .env
-reports/
+data/*.pdf
+reports/*.pdf
+__pycache__/
+*.pyc
 scripts/chunk_pdf.py
 scripts/extract_pdf.py
 scripts/index_chroma.py

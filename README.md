@@ -1,195 +1,146 @@
-# AI 金融求职 — 学习项目
+# AI Finance Portfolio
 
-Python + LLM 驱动的金融分析学习项目。从股票分析到 AI Agent，一步步搭建金融研究工具集。
+面向 AI + Finance 求职的阶段式作品集。这个仓库不是零散工具集合，而是一条从金融数据分析到 LLM 应用、再到 RAG 金融文档问答系统的学习和项目主线。
 
-## 项目结构
+## Portfolio Overview
 
-```
+| 阶段 | 项目 | 核心能力 | 产出形态 | 状态 |
+|---|---|---|---|---|
+| 1 | [股票收益率与风险分析](./01-stock-analysis/) | Python、Pandas、SQL、金融指标、可视化 | 数据分析脚本 + 图表输出 | 已完成 |
+| 2 | [金融新闻摘要工具](./02-news-summarizer/) | LLM API、Prompt、结构化输出、缓存、CLI | 命令行摘要工具 | 已完成 |
+| 3 | [金融文档 RAG 问答系统](./03-financial-rag/) | PDF 解析、Embedding、Chroma、RAG、Streamlit | Web 问答应用 | 已完成 |
+
+> 阶段 2 的新闻摘要工具保留为本仓库第二阶段项目，不再作为独立作品集主页项目单独展示。
+
+## Repository Structure
+
+```text
 ai-finance-portfolio/
-├── 01-stock-analysis/         # 阶段1：Python + 数据分析
-│   ├── 01-basic.py            # Day 1-2：Python 基础
-│   ├── 02-pandas-intro.py     # Day 3：Pandas 入门
-│   ├── 03-plot.py             # Day 4：Matplotlib 画图
-│   ├── 05-preview-groupby-merge.py  # Day 7：分组与合并
-│   ├── 06-day8-groupby-merge.py     # Day 8：进阶分组
-│   ├── 07-day8-exercises.py         # Day 8：练习题
-│   ├── 08-day9-download.py          # Day 9：yfinance 数据下载
-│   ├── 09-day10-analyze.py          # Day 10：风险收益指标计算
-│   ├── 10-day11-visualize.py        # Day 11：净值曲线 + 热力图
-│   ├── 11-semiconductor-analysis.py # 半导体行业扩展分析
-│   ├── sql/                    # SQL 学习
-│   │   ├── 04-sqlite-python.py
-│   │   ├── stock_learning.sql
-│   │   ├── day6_practice.sql
-│   │   └── stock_learning.db
-│   ├── data/                   # 数据文件
-│   └── output/                 # 输出图表
-│       ├── nav_curve.png
-│       ├── correlation_heatmap.png
-│       ├── semiconductor_nav.png
-│       └── semiconductor_heatmap.png
-│
-├── 02-news-summarizer/        # 阶段2：LLM + Prompt Engineering
-│   ├── 01-first-call.py              # Day 15：首次调用 DeepSeek API
-│   ├── 02-prompt-lab.py              # Day 16：结构化 Prompt 实验
-│   ├── 03-structured-output.py       # Day 17：JSON 强制输出 + Pydantic
-│   ├── 03-structured-output-practice.py  # Day 17：练习 — 股票推荐模型
-│   └── 04-function-calling.py        # Day 18：Function Calling 三步走
-│
-├── 03-financial-rag/          # 阶段3：RAG 知识库 + Streamlit
-│   ├── app.py                       # Streamlit Web 界面
-│   ├── scripts/
-│   │   └── rag_engine.py            # RAG 引擎（5 个核心函数）
-│   ├── .env                         # API 密钥（需自行配置）
-│   ├── requirements.txt             # 本模块依赖
-│   └── .gitignore                   # 忽略 chroma_db/ data/ .env
-│
-├── .gitignore
-├── README.md
-├── requirements.txt
-└── verify_setup.py
+├── 01-stock-analysis/        # 阶段 1：股票数据分析与风险指标
+├── 02-news-summarizer/       # 阶段 2：LLM 金融新闻摘要工具
+├── 03-financial-rag/         # 阶段 3：金融文档 RAG 问答系统
+├── 04-finance-agent/         # 后续阶段：金融 Agent 原型
+├── requirements.txt          # 阶段 1-3 公共依赖
+├── verify_setup.py           # 环境检查脚本
+└── README.md
 ```
 
-## 阶段 1：Python + 数据分析（Day 1-12）
+## Project 1: 股票收益率与风险分析
 
-分析 A 股多只股票的历史数据，计算风险收益指标。
+目标：用 Python 完成一套基础金融数据分析流程，从数据获取到风险收益指标计算，再到图表展示。
 
-### 功能
+主要内容：
 
-- 用 yfinance 下载多只股票历史数据
+- 使用 `yfinance` 下载股票历史行情
+- 用 Pandas 处理价格、收益率和多股票数据
 - 计算年化收益率、年化波动率、最大回撤、夏普比率
-- 画累计净值曲线对比图（标注最大回撤位置）
-- 画股票日收益率相关性热力图
-- SQLite 数据库操作练习
+- 绘制累计净值曲线、相关性热力图和行业对比图
+- 使用 SQLite 做基础 SQL 查询练习
 
-### 使用方式
+运行示例：
 
 ```bash
-# 安装依赖
-pip install -r requirements.txt
-
-# 下载数据
-python 01-stock-analysis/08-day9-download.py
-
-# 分析（计算风险收益指标）
-python 01-stock-analysis/09-day10-analyze.py
-
-# 可视化
-python 01-stock-analysis/10-day11-visualize.py
+python3 01-stock-analysis/08-download.py
+python3 01-stock-analysis/09-analyze.py
+python3 01-stock-analysis/10-visualize.py
 ```
 
-### 分析结果示例
+## Project 2: 金融新闻摘要工具
 
-| 股票 | 年化收益率 | 年化波动率 | 最大回撤 | 夏普比率 |
-|------|-----------|-----------|---------|---------|
-| 茅台 | 15.2% | 22.1% | -18.5% | 0.68 |
-| 宁德时代 | 248.12% | — | — | — |
+目标：把 LLM API 调用包装成一个可复用的金融新闻摘要 CLI 工具，而不是只停留在单次 API 示例。
 
-（注：具体数值随下载时间段变化。）
+主要内容：
 
-## 阶段 2：LLM API + Prompt Engineering（Day 15-18）
+- 调用 DeepSeek OpenAI-compatible API
+- 通过 Prompt 约束 JSON 输出
+- 使用 Pydantic 校验结构化结果
+- 支持交互输入、管道输入、单文件、多文件和目录批处理
+- 使用 MD5 本地缓存避免重复调用
+- 记录调用日志、token 数、耗时和成本
 
-用 DeepSeek API（兼容 OpenAI 格式）构建金融新闻摘要工具的基础能力。
-
-### 学习路线
-
-| Day | 主题 | 代码 |
-|-----|------|------|
-| 15 | 首次 API 调用 | `01-first-call.py` |
-| 16 | 结构化 Prompt 实验 | `02-prompt-lab.py` |
-| 17 | Structured Output（JSON + Pydantic） | `03-structured-output.py` |
-| 17 练习 | 自己写 StockRecommendation 模型 | `03-structured-output-practice.py` |
-| 18 | Function Calling（工具定义 + 三步走） | `04-function-calling.py` |
-
-### 核心概念
-
-- **Structured Output**：让 LLM 返回 JSON 格式数据，而不是自然语言
-- **Pydantic BaseModel**：用 Python class 定义数据结构，自动做类型校验
-- **Function Calling**：模型选择工具 → 代码执行 → 结果回传 → 模型回答
-- **Tool Schema**：用 JSON Schema 描述函数名、参数、用途
-
-### 使用方式
+运行示例：
 
 ```bash
-# 先配 API key（用 DeepSeek）
 cd 02-news-summarizer
-cp .env.example .env   # 填入你的 DEEPSEEK_API_KEY
+pip install -r requirements.txt
+cp .env.example .env
 
-# 跑 Day 18 Function Calling
-python 04-function-calling.py
+python3 main.py articles/01-ashare.txt
+python3 main.py --dir ./articles/
+python3 main.py --log
 ```
 
-## 阶段 3：RAG 知识库 + Streamlit Web 界面（Day 29-35）
+## Project 3: 金融文档 RAG 问答系统
 
-基于 RAG（Retrieval-Augmented Generation）的金融文档问答系统。上传 PDF 年报，用自然语言提问，LLM 基于检索到的原文回答。
+目标：做一个可以上传金融 PDF、检索原文片段并生成带来源回答的 RAG 应用。
 
-### 功能
+主要内容：
 
-- 上传 PDF 年报 → 自动切分 → Embedding → 存入 Chroma 向量数据库
-- 自然语言提问，检索最相关的段落 + LLM 生成回答
-- Cross-Encoder Rerank 提升检索精度
-- 引用来源展示，方便核实验证
-- 聊天式对话历史，可导出 Markdown
-- 文档库管理：选择、重命名、删除
+- 使用 `pdfplumber` 提取年报 / 研报文本
+- 使用 `RecursiveCharacterTextSplitter` 切分文本
+- 使用 `BAAI/bge-small-zh-v1.5` 生成本地 embedding
+- 使用 ChromaDB 持久化向量库
+- 调用 DeepSeek 基于检索上下文生成回答
+- 使用 Streamlit 提供聊天界面、引用来源和 Markdown 导出
 
-### 技术栈
-
-| 组件 | 技术 |
-|------|------|
-| 前端 | Streamlit |
-| 文本提取 | pdfplumber |
-| 文本切分 | RecursiveCharacterTextSplitter（LangChain） |
-| Embedding 模型 | BAAI/bge-small-zh-v1.5（本地 512 维） |
-| 向量数据库 | ChromaDB（本地持久化） |
-| Rerank 模型 | cross-encoder/ms-marco-MiniLM-L-6-v2 |
-| 生成模型 | DeepSeek-v4-Flash（OpenAI 兼容 API） |
-
-### 使用方式
+运行示例：
 
 ```bash
 cd 03-financial-rag
-
-# 1. 安装依赖
 pip install -r requirements.txt
+cp .env.example .env
 
-# 2. 配置 API 密钥（.env 文件）
-echo "DEEPSEEK_API_KEY=你的密钥" > .env
-
-# 3. 放一份年报 PDF 到 data/ 目录
-
-# 4. 启动 Web 界面
 streamlit run app.py
-
-# 浏览器打开 http://localhost:8501
-# 侧边栏可上传多份 PDF 并切换文档库
 ```
 
-### RAG 流程
+浏览器打开 `http://localhost:8501`。
+
+## Quick Start
+
+建议使用 Python 3.10+。
+
+```bash
+git clone https://github.com/dagongzhanshi1/ai-finance-portfolio.git
+cd ai-finance-portfolio
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+pip install -r requirements.txt
+python3 verify_setup.py
+```
+
+需要调用 DeepSeek API 的阶段，先配置 `.env`：
+
+```bash
+cp 02-news-summarizer/.env.example 02-news-summarizer/.env
+cp 03-financial-rag/.env.example 03-financial-rag/.env
+```
+
+然后在 `.env` 中填写：
 
 ```text
-PDF → pdfplumber 提取文本 → RecursiveCharacterTextSplitter 切分（500+100）
-    → bge-small-zh Embedding（512 维）
-    → ChromaDB 存储
-    → 用户提问 → Embedding 检索 20 个 → Cross-Encoder Rerank → top 5
-    → DeepSeek 生成回答 → 带引用来源展示
+DEEPSEEK_API_KEY=your_api_key_here
 ```
 
-### 查询结果示例
+## Data And Secrets
 
+以下内容不会提交到 GitHub：
+
+- `.env` API 密钥文件
+- ChromaDB 本地数据库
+- 大体积 PDF 年报和研报
+- 运行生成的缓存、日志、JSON 输出
+- Python 缓存、数据库文件和图片输出
+
+## Learning Notes
+
+这个仓库的核心价值不是单个脚本，而是三个阶段能力的递进：
+
+```text
+金融数据分析
+  -> LLM 结构化处理金融文本
+  -> RAG 检索金融文档并生成可追溯回答
 ```
-问：宁德时代 2025 年的毛利率和净利率是多少？
-答：毛利率约为 26.27%（营收 4,237 亿，成本 3,123 亿），
-    净利率约为 17.04%（净利润 722 亿）。
-    （引用来源：年报"营业收入和营业成本"及"净利润"片段）
-```
 
-## 数据来源
-
-- Yahoo Finance（通过 yfinance 库获取）
-- DeepSeek API（OpenAI 兼容格式）
-
-## 环境要求
-
-- Python 3.10+
-- 依赖包见 requirements.txt
-- DeepSeek API key（或兼容 OpenAI 格式的其他 API）
+后续阶段会在 `04-finance-agent/` 中继续扩展金融 Agent，但当前 GitHub 主页重点展示前 3 个已完成项目。
