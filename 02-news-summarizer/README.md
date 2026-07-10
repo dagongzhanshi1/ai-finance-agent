@@ -1,6 +1,6 @@
 # Project 2: 金融新闻摘要工具
 
-阶段 2 项目，目标是把 LLM API 调用做成一个可复用的金融新闻摘要 CLI 工具。它不是独立作品集主页项目，而是 `ai-finance-portfolio` 的第二阶段。
+阶段 2 项目，目标是把 LLM API 调用做成一个可复用的金融新闻摘要 CLI 工具。它不是独立作品集主页项目，而是 `ai-finance-agent` 的第二阶段。
 
 ## What It Does
 
