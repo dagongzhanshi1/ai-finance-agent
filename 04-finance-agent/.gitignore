@@ -1,0 +1,25 @@
+# 学习/调试文件（不推送）
+langgraph_demo.py
+langgraph_llm.py
+langgraph_conditional.py
+langgraph_workflow.py
+langgraph_workflow_logged.py
+langgraph_flow.png
+
+# 旧的手写 Agent 学习文件
+agent.py
+tool_schemas.py
+scripts/
+
+# 日志文件
+agent.log
+
+# API Key
+.env
+
+# macOS
+.DS_Store
+
+# Python 缓存
+__pycache__/
+*.pyc
