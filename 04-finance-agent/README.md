@@ -79,4 +79,27 @@ Supervisor（检查 State，决定下一步）
 - **LangChain** — LLM 调用封装 + @tool
 - **DeepSeek API** — AI 模型
 - **MCP** — 工具协议（Hermes 原生支持）
+
+## 快速参考
+
+| 你想做什么 | 运行什么 | 结果在哪看 |
+|-----------|---------|-----------|
+| 测试所有路径 | `make test` | 终端直接输出 |
+| 查一只股票 | `make run s=600519` | 终端直接输出 |
+| 打开网页界面 | `make streamlit` | http://localhost:8501 |
+| Supervisor 模式 | `make supervisor q="分析茅台"` | 终端直接输出 |
+| 启动 MCP 服务器 | `make mcp` | 等待连接 |
+
+**文件说明：**
+
+| 文件 | 干什么的 |
+|------|---------|
+| `workflow.py` | 主力工作流（查行情→查财务→搜新闻→LLM报告） |
+| `cli.py` | 命令行入口（调用 workflow.py） |
+| `app.py` | Streamlit 网页（支持 Agent 对话 + LangGraph 两种模式） |
+| `supervisor_agent.py` | Supervisor Agent 模式 |
+| `mcp_stock_server.py` | MCP 股票查询服务器 |
+| `tools_def.py` | 所有 @tool 工具定义 |
+| `Makefile` | 快捷命令入口 |
+
 - **Streamlit** — Web 界面
