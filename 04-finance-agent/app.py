@@ -12,7 +12,22 @@ from tools_def import ALL_TOOLS_GROUPS, ALL_TOOLS
 load_dotenv()
 
 
-# ========== 工具函数 ==========
+# ========== LangGraph 工作流 ==========
+def run_langgraph_workflow(symbol: str):
+    """调用 LangGraph 工作流生成分析报告"""
+    from workflow import app as langgraph_app
+    result = langgraph_app.invoke({
+        "symbol": symbol,
+        "stock_info": None,
+        "financial_info": None,
+        "news": None,
+        "report": None,
+        "token_usage": None,
+    })
+    return result["report"], result.get("token_usage")
+
+
+# ========== 原有 Agent 函数 ==========
 def run_agent(prompt, active_tools, llm):
     """执行 agent，捕获 stdout/stderr 返回调试信息"""
     f = io.StringIO()
@@ -27,66 +42,91 @@ def run_agent(prompt, active_tools, llm):
 
 
 # ========== Streamlit 界面 ==========
-st.set_page_config(page_title="AI 金融助手 Agent", page_icon="📈", layout="wide")
+st.set_page_config(page_title="AI Finance Agent", layout="wide")
 
-with st.sidebar:
-    st.title("🤖 金融助手")
-    st.markdown("---")
+# 模式选择
+mode = st.sidebar.radio("模式", ["Agent 对话", "LangGraph 工作流"], index=0)
 
-    st.subheader("🔧 启用工具")
-    enabled_groups = {}
-    for group_name in ALL_TOOLS_GROUPS:
-        enabled_groups[group_name] = st.checkbox(group_name, value=True)
+if mode == "Agent 对话":
+    # ====== 原有 Agent 界面 ======
+    with st.sidebar:
+        st.markdown("---")
+        st.subheader("启用工具")
+        enabled_groups = {}
+        for group_name in ALL_TOOLS_GROUPS:
+            enabled_groups[group_name] = st.checkbox(group_name, value=True)
 
-    active_tools = []
-    for group_name, tools_list in ALL_TOOLS_GROUPS.items():
-        if enabled_groups.get(group_name, True):
-            active_tools.extend(tools_list)
+        active_tools = []
+        for group_name, tools_list in ALL_TOOLS_GROUPS.items():
+            if enabled_groups.get(group_name, True):
+                active_tools.extend(tools_list)
 
-    st.markdown("---")
-    st.subheader("⚙️ 模型参数")
-    temperature = st.slider("Temperature", 0.0, 1.5, 0.0, 0.1)
-    show_debug = st.checkbox("显示思考过程 (debug)", value=False)
+        st.markdown("---")
+        st.subheader("模型参数")
+        temperature = st.slider("Temperature", 0.0, 1.5, 0.0, 0.1)
+        show_debug = st.checkbox("显示思考过程 (debug)", value=False)
 
-    st.markdown("---")
-    st.caption("数据来源：东方财富 / Yahoo Finance / RAG 知识库")
-    st.caption(f"已启用 {len(active_tools)} 个工具")
+        st.caption(f"已启用 {len(active_tools)} 个工具")
+        if st.button("清空对话", use_container_width=True):
+            st.session_state.messages = []
+            st.rerun()
 
-    if st.button("🗑️ 清空对话", use_container_width=True):
+    st.title("Agent 对话")
+
+    if "messages" not in st.session_state:
         st.session_state.messages = []
-        st.rerun()
 
-st.title("📈 AI 金融助手")
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+    if prompt := st.chat_input("输入你的问题，例如「茅台今天股价多少？」"):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        llm = ChatOpenAI(
+            model="deepseek-chat",
+            api_key=os.getenv("DEEPSEEK_API_KEY"),
+            base_url="https://api.deepseek.com/v1",
+            temperature=temperature,
+        )
 
-if prompt := st.chat_input("输入你的问题，例如「茅台今天股价多少？」"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
+        with st.chat_message("assistant"):
+            with st.spinner("查询中..."):
+                try:
+                    reply, debug_output = run_agent(prompt, active_tools, llm)
+                    if show_debug and debug_output.strip():
+                        with st.expander("思考过程", expanded=False):
+                            st.text(debug_output)
+                    st.markdown(reply)
+                    st.session_state.messages.append({"role": "assistant", "content": reply})
+                except Exception as e:
+                    error_msg = f"查询失败: {type(e).__name__}: {e}"
+                    st.error(error_msg)
+                    st.session_state.messages.append({"role": "assistant", "content": error_msg})
 
-    llm = ChatOpenAI(
-        model="deepseek-chat",
-        api_key=os.getenv("DEEPSEEK_API_KEY"),
-        base_url="https://api.deepseek.com/v1",
-        temperature=temperature,
+else:
+    # ====== LangGraph 工作流界面 ======
+    st.title("LangGraph 工作流")
+
+    st.markdown(
+        "输入股票代码，运行多步金融分析工作流："
+        "查行情 → 查财务指标 → 搜新闻 → LLM 生成报告"
     )
 
-    with st.chat_message("assistant"):
-        with st.spinner("查询中..."):
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        symbol = st.text_input("股票代码", value="600519", placeholder="如 600519（茅台）或 002594（比亚迪）")
+    with col2:
+        run_btn = st.button("运行分析", type="primary", use_container_width=True)
+
+    if run_btn:
+        with st.spinner(f"正在分析 {symbol}..."):
             try:
-                reply, debug_output = run_agent(prompt, active_tools, llm)
-                if show_debug and debug_output.strip():
-                    with st.expander("🔍 思考过程", expanded=False):
-                        st.text(debug_output)
-                st.markdown(reply)
-                st.session_state.messages.append({"role": "assistant", "content": reply})
+                report, token_usage = run_langgraph_workflow(symbol)
+                st.markdown(report)
+                if token_usage:
+                    st.caption(token_usage)
             except Exception as e:
-                error_msg = f"❌ 查询失败: {type(e).__name__}: {e}"
-                st.error(error_msg)
-                st.session_state.messages.append({"role": "assistant", "content": error_msg})
+                st.error(f"分析失败: {type(e).__name__}: {e}")

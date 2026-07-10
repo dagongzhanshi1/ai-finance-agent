@@ -34,6 +34,7 @@ class AgentState(TypedDict):
     financial_info: Optional[str]
     news: Optional[str]
     report: Optional[str]
+    token_usage: Optional[str]            # Token 消耗统计
 
 
 def search_stock(state: AgentState):
@@ -94,8 +95,12 @@ def generate_report(state: AgentState):
 5. 一句话总结
 """
     response = llm.invoke(prompt)
-    logger.info(f"LLM 返回 {len(response.content)} 字")
-    return {"report": response.content}
+    usage = response.response_metadata.get("token_usage", {})
+    tokens = usage.get("total_tokens", 0)
+    cost = tokens * 0.0000005  # DeepSeek 约 $0.5/百万 token
+    token_info = f"提示: {usage.get('prompt_tokens', 0)} token | 生成: {usage.get('completion_tokens', 0)} token | 总计: {tokens} token | 费用: ${cost:.5f}"
+    logger.info(f"LLM 返回 {len(response.content)} 字 | {token_info}")
+    return {"report": response.content, "token_usage": token_info}
 
 
 def no_data(state: AgentState):

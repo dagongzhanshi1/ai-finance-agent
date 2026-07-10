@@ -20,3 +20,5 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 40)
     print(result["report"])
+    if result.get("token_usage"):
+        print(f"\n--- {result['token_usage']} ---")
