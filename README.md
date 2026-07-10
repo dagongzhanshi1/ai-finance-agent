@@ -14,7 +14,7 @@
 ## Repository Structure
 
 ```text
-ai-finance-portfolio/
+ai-finance-agent/
 ├── 01-stock-analysis/        # 阶段 1：股票数据分析与风险指标
 ├── 02-news-summarizer/       # 阶段 2：LLM 金融新闻摘要工具
 ├── 03-financial-rag/         # 阶段 3：金融文档 RAG 问答系统
@@ -86,8 +86,8 @@ python mcp_stock_server.py
 建议使用 Python 3.10+。
 
 ```bash
-git clone https://github.com/dagongzhanshi1/ai-finance-portfolio.git
-cd ai-finance-portfolio
+git clone https://github.com/dagongzhanshi1/ai-finance-agent.git
+cd ai-finance-agent
 
 python3 -m venv .venv
 source .venv/bin/activate
