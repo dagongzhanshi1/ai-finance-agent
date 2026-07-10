@@ -19,14 +19,6 @@ ai-finance-agent/
 ├── 02-news-summarizer/       # 阶段 2：LLM 金融新闻摘要工具
 ├── 03-financial-rag/         # 阶段 3：金融文档 RAG 问答系统
 ├── 04-finance-agent/         # 阶段 4：LangGraph 金融 Agent 工作流
-│   ├── workflow.py           # LangGraph 工作流（查行情→查财务→搜新闻→LLM报告）
-│   ├── cli.py                # 命令行入口
-│   ├── app.py                # Streamlit Web 界面
-│   ├── tools_def.py          # @tool 工具定义
-│   ├── supervisor_agent.py   # Supervisor Agent 模式
-│   ├── mcp_stock_server.py   # MCP 股票查询服务器
-│   ├── README.md
-│   └── .gitignore
 ├── requirements.txt
 ├── README.md
 └── verify_setup.py
