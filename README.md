@@ -1,4 +1,4 @@
-# AI Finance Agent
+# AI Finance Lab
 
 面向 AI + Finance 求职的阶段式作品集——从金融数据分析到 LLM 应用、RAG 文档问答、再到 LangGraph 多步 Agent 工作流。
 
@@ -14,7 +14,7 @@
 ## Repository Structure
 
 ```text
-ai-finance-agent/
+ai-finance-lab/
 ├── 01-stock-analysis/        # 阶段 1：股票数据分析与风险指标
 ├── 02-news-summarizer/       # 阶段 2：LLM 金融新闻摘要工具
 ├── 03-financial-rag/         # 阶段 3：金融文档 RAG 问答系统
@@ -78,8 +78,8 @@ python mcp_stock_server.py
 建议使用 Python 3.10+。
 
 ```bash
-git clone https://github.com/dagongzhanshi1/ai-finance-agent.git
-cd ai-finance-agent
+git clone https://github.com/dagongzhanshi1/ai-finance-lab.git
+cd ai-finance-lab
 
 python3 -m venv .venv
 source .venv/bin/activate
